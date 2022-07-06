@@ -3,12 +3,11 @@
 pragma solidity ^0.8.1;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/PullPayment.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract hotelBooking is Ownable, Pausable, PullPayment, ReentrancyGuard {
+contract hotelBooking is Ownable, Pausable, ReentrancyGuard {
    
    event Booked(address _buyer, uint _value);
 
@@ -61,6 +60,7 @@ contract hotelBooking is Ownable, Pausable, PullPayment, ReentrancyGuard {
   onlyIfVacant 
   cost(1 ether) 
     {
+     require( Checkout >= block.timestamp , "Has to be the future" );
      currentStatus = status.occupied;
      Owner.transfer(msg.value);
      checkoutTime = Checkout;
@@ -86,7 +86,7 @@ contract hotelBooking is Ownable, Pausable, PullPayment, ReentrancyGuard {
      owner = numberOfOccupants[id].owner;
     }
 
-    function withdrawEther(uint weiAmount) 
+    function recoverETHFromContract(uint weiAmount) 
     external 
     onlyOwner 
     {
@@ -94,10 +94,10 @@ contract hotelBooking is Ownable, Pausable, PullPayment, ReentrancyGuard {
      payable(owner()).transfer(weiAmount);
     }
 
-    function withdrwnToken(address _tokenAddress, address _to, uint _amount) 
+    function recoverAnyERC20TokensFromContract(address _tokenAddress, address _to, uint _amount) 
     external 
     {
-     IERC20(_tokenAddr).transfer(_to, _amount);
+     IERC20(_tokenAddress).transfer(_to, _amount);
     }
 
     
