@@ -2,8 +2,6 @@ const main = async () => {
   const[deployer] = await hre.ethers.getSigners();
   console.log("deploying contracts with account: ", deployer.address);
   
-  const hotelBookingContractFactory = await hre.ethers.getContractFactory("hotelBooking");
-  const hotelBookingContract = await hotelBookingContractFactory.deploy();
   const ERC20PaymentContractFactory = await hre.ethers.getContractFactory("ERC20Payment");
   const ERC20PaymentContract = await ERC20PaymentContractFactory.deploy();
   const AlToken = await ethers.getContractFactory("AlToken");
@@ -14,7 +12,7 @@ const main = async () => {
     alToken.address
   );
 
-  console.log("HotelBooking Address", hotelBookingContract.address);
+  console.log("ERC20Payment Address", ERC20PaymentContract.address);
   console.log("AlToken deployed to:", alToken.address);
 }
 

@@ -4,10 +4,9 @@ pragma solidity ^0.8.1;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract hotelBooking is Ownable, Pausable, ReentrancyGuard {
+contract hotelBooking is Ownable, Pausable {
    
    event Booked(address _buyer, uint _value);
 
@@ -59,7 +58,6 @@ contract hotelBooking is Ownable, Pausable, ReentrancyGuard {
   function Booking(uint Checkout, string memory name) 
   external 
   payable 
-  nonReentrant
   whenNotPaused
   onlyIfVacant 
   cost(1 ether) 
