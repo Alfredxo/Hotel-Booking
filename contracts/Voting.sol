@@ -36,16 +36,16 @@ contract Ballot is Ownable {
   function allCandiates(uint id) external view returns(string[] memory, uint[] memory) {
     string[] memory names = new string[](candidateCount);
     uint[] memory voteCounts = new uint[](candidateCount);
-    for(uint i = 0, i < candidateCount, i++) {
+    for(uint i = 0; i < candidateCount; i++) {
        names[i] = candidateLookup[i].name;
        voteCount[i] = candidateLookup[i].voteCount;
     }
-    return(names, voteCounts)
+    return(names, voteCounts);
   }
 
   function vote(uint id) {
     require(!voterLookup[msg.sender]);
-    require(id >= 0 && id <= candidateCount-1)
+    require(id >= 0 && id <= candidateCount-1);
     candidateLookup[id].voteCount++;
     emit voteEvent(uint id);
 

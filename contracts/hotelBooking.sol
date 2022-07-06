@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/PullPayment.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract hotelBooking is Ownable, Pausable, PullPayment, ReentrancyGuard {
    
@@ -83,6 +84,20 @@ contract hotelBooking is Ownable, Pausable, PullPayment, ReentrancyGuard {
     {
      name = numberOfOccupants[id].name;
      owner = numberOfOccupants[id].owner;
+    }
+
+    function withdrawEther(uint weiAmount) 
+    external 
+    onlyOwner 
+    {
+     require(address(this).balance >= weiAmount, "insufficient ETH balance");
+     payable(owner()).transfer(weiAmount);
+    }
+
+    function withdrwnToken(address _tokenAddress, address _to, uint _amount) 
+    external 
+    {
+     IERC20(_tokenAddr).transfer(_to, _amount);
     }
 
     
