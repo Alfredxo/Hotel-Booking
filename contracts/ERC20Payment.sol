@@ -10,7 +10,7 @@ contract ERC20Payment is hotelBooking {
 
    constructor()  
     {
-        token = IERC20(0x62D62D73C27E6240165ee3A97C6d1532c0dD0b42);
+        token = IERC20(0x04D30d688c9534F117801781a35FFDC1e8E57621);
     }
 
     function Approvetokens(uint256 _tokenamount) public returns(bool)
