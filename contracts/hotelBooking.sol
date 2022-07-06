@@ -20,11 +20,14 @@ contract hotelBooking is Ownable, Pausable, PullPayment, ReentrancyGuard {
    }
 
   struct Occupants {
+    uint id;
+    string name;
     address owner;
     uint timestamp;
    }
   
-  Occupants[] Bookers;
+  mapping (uint => Occupants) numberOfOccupants;
+  uint totalOccupants;
 
    status public currentStatus;
 
@@ -49,23 +52,37 @@ contract hotelBooking is Ownable, Pausable, PullPayment, ReentrancyGuard {
    _;
    }
 
-  function Booking(uint Checkout) external payable onlyIfVacant cost(1 ether) {
+  function Booking(uint Checkout, string memory name) 
+  external 
+  payable 
+  nonReentrant
+  whenNotPaused
+  onlyIfVacant 
+  cost(1 ether) 
+    {
      currentStatus = status.occupied;
      Owner.transfer(msg.value);
      checkoutTime = Checkout;
-     Bookers.push(Occupants(msg.sender, block.timestamp));
+     numberOfOccupants[totalOccupants] = Occupants(totalOccupants, name, msg.sender, block.timestamp);
+     totalOccupants++;
 
      emit Booked(msg.sender, msg.value);
     }
 
-    function makeVacant() public onlyIfOccupied {
+    function makeVacant() public 
+    onlyIfOccupied 
+    
+    {
         require( block.timestamp >= checkoutTime , "Not Checkout Date" );
         currentStatus = status.vacant;
-        
     }
     
-    function getAllOccupants() public view returns(Occupants[] memory) {
-       return Bookers;
+    function getOccupant(uint id) public 
+    view 
+    returns(string memory name, address owner) 
+    {
+     name = numberOfOccupants[id].name;
+     owner = numberOfOccupants[id].owner;
     }
 
     
