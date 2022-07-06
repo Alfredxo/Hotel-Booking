@@ -11,32 +11,36 @@ contract hotelBooking is Ownable, Pausable, ReentrancyGuard {
    
    event Booked(address _buyer, uint _value);
 
-   address payable immutable Owner;
+   address payable Owner;
    uint internal checkoutTime;
    
-  enum status {
+  enum status 
+   {
     vacant,
     occupied
    }
 
-  struct Occupants {
+  struct Occupants 
+    {
     uint id;
     string name;
     address owner;
     uint timestamp;
-   }
+    }
   
   mapping (uint => Occupants) numberOfOccupants;
   uint totalOccupants;
 
    status public currentStatus;
 
-   constructor() {
+   constructor() 
+    {
     Owner = payable(msg.sender);
     currentStatus = status.vacant;
-   } 
+    } 
 
-   modifier onlyIfVacant() {
+   modifier onlyIfVacant() 
+   {
     require(currentStatus == status.vacant, "Currently Occupied");
     _;
    }
